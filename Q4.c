@@ -32,3 +32,7 @@ void main() {
         timer1_delay();
     }
 }
+
+
+
+Write an 8051 embedded C program to count up to 149, when the count reaches 150, toggle an LED connected to P1.3. The Tox and TOFF of the LED is 20 micro sec each, use Timer 0 as the counter and use Timer 1 to create the delay.
