@@ -2,33 +2,29 @@
 
 sbit switch_pin = P2^3;  // Define switch at P2.3
 
-unsigned char count_ones(unsigned char data) {
-    unsigned char count = 0;
-    while (data) {
-        count += (data & 1);
-        data >>= 1;
-    }
-    return count;
-}
-
-unsigned char count_zeros(unsigned char data) {
-    return 8 - count_ones(data);  // Since it's an 8-bit value
-}
-
 void main() {
-    unsigned char data, result;
+    unsigned char data, count, i;
     
     P1 = 0x55;  // Load P1 with 0x55 (01010101 in binary)
     
     while (1) {
         data = P1;  // Read data from P1
+        count = 0;
         
-        if (switch_pin == 1) {  // Switch ON
-            result = count_ones(data);
-        } else {  // Switch OFF
-            result = count_zeros(data);
+        if (switch_pin == 1) {  // Switch ON -> Count 1s
+            for (i = 0; i < 8; i++) {
+                if (data & (1 << i)) {
+                    count++;
+                }
+            }
+        } else {  // Switch OFF -> Count 0s
+            for (i = 0; i < 8; i++) {
+                if (!(data & (1 << i))) {
+                    count++;
+                }
+            }
         }
         
-        // You can store or display the result as needed
+        // Store or display count as needed
     }
 }
