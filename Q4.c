@@ -1,7 +1,6 @@
 #include <reg51.h>
 
 sbit LED = P1^3;  
-unsigned int count = 0;
 
 void timer1_delay() {
     TMOD |= 0x10;  
@@ -13,26 +12,24 @@ void timer1_delay() {
     TF1 = 0;       
 }
 
-void timer0_ISR() interrupt 1 {
-    count++;
-
-    if (count >= 150) {
-        LED = ~LED;  
-        timer1_delay();  
-        LED = ~LED;  
-        timer1_delay();
-        count = 0;  
-    }
-}
-
 void main() {
-    TMOD = 0x01;  
-    TH0 = 0xFC;   
-    TL0 = 0x66;  
-    ET0 = 1;  
-    EA = 1;   
+    unsigned int count = 0;
+
+    TMOD = 0x05;  
     TR0 = 1;  
 
     while (1) {
+        if (TF0 == 1) {
+            TF0 = 0;  
+            count++;
+
+            if (count >= 150) {
+                LED = ~LED;  
+                timer1_delay();  
+                LED = ~LED;  
+                timer1_delay();
+                count = 0;  
+            }
+        }
     }
 }
